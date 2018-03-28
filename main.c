@@ -120,7 +120,7 @@ int     links(t_lmn *lmn, int i, int j)
     {
         if (tmp->id == j)
         {
-            //ft_printf("[%s|%d]\n", tmp->name, tmp->id);
+            ft_printf("[%s|%d]\n", tmp->name, tmp->id);
             lnk = tmp->links;
             while (lnk)
             {
@@ -173,6 +173,7 @@ void    matrix(t_lmn *lmn)
 int    findway(t_lmn *lmn, int i, t_list *begin)
 {
     int j;
+    int r;
 
     j = -1;
     if (lmn->mtrx[i][lmn->end] == 1)
@@ -190,8 +191,8 @@ int    findway(t_lmn *lmn, int i, t_list *begin)
             {
                 lmn->mtrxv[j] = 1;
                 ft_lstpushback((t_list **)&begin->content, &j, sizeof(int));
-                findway(lmn, j, begin);
-                return (1);
+                r = findway(lmn, j, begin);
+                return (r);
             }
         }
     }
@@ -210,14 +211,28 @@ void    recur(t_lmn *lmn)
     {
         if (lmn->mtrx[lmn->str][i] == 1)
         {
-            lmn->mtrxv[i] = 1;
-            ft_lstpushback((t_list **)&begin->content, &lmn->str, sizeof(int));
-            ft_lstpushback((t_list **)&begin->content, &i, sizeof(int));
-            if (i != lmn->end)
-                findway(lmn, i, begin);
-            begin->next = ft_lstnew(NULL, 0);
-            begin = begin->next;
-            lmn->wid++;
+            if (i == lmn->end)
+            {
+                ft_lstpushback((t_list **)&begin->content, &lmn->str, sizeof(int));
+                ft_lstpushback((t_list **)&begin->content, &lmn->end, sizeof(int));
+                begin->next = ft_lstnew(NULL, 0);
+                begin = begin->next;
+                lmn->wid++;
+            }
+            else
+            {
+                lmn->mtrxv[i] = 1;
+                if (findway(lmn, i, begin))
+                {
+                    ft_lstadd((t_list **)&begin->content, ft_lstnew(&i, sizeof(int)));
+                    ft_lstadd((t_list **)&begin->content, ft_lstnew(&lmn->str, sizeof(int)));
+                    begin->next = ft_lstnew(NULL, 0);
+                    begin = begin->next;
+                    lmn->wid++;
+                }
+                else
+                    free(begin->content);
+            }
         }
     }
     begin->content = NULL;
