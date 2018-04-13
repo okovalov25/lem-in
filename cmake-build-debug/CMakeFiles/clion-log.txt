@@ -1,0 +1,4 @@
+/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug DCMAKE_CXX_COMPILER=/usr/bin/clang -G "CodeBlocks - Unix Makefiles" /Users/okovalov/lem-in
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/okovalov/lem-in/cmake-build-debug

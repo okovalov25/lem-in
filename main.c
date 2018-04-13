@@ -151,6 +151,7 @@ void    matrix(t_lmn *lmn)
     j = -1;
     lmn->mtrx = (int **)malloc(sizeof(int *) * lmn->id + 1);
     lmn->mtrxv = (int *)malloc(sizeof(int) * lmn->id + 1);
+    lmn->vroom = (int *)malloc(sizeof(int) * lmn->id + 1);
     while (++j <= lmn->id)
     {
         i = -1;
@@ -159,6 +160,7 @@ void    matrix(t_lmn *lmn)
         while (++i <= lmn->id)
         {
             lmn->mtrxv[i] = 0;
+            lmn->vroom[i] = 0;
             lmn->mtrxv[lmn->str] = 1;
             if (i == j)
                 lmn->mtrx[j][i] = 0;
@@ -203,6 +205,7 @@ void    recur(t_lmn *lmn)
 {
     t_list *begin;
     int i;
+    int j;
 
     i = -1;
     begin = ft_lstnew(NULL, 0);
@@ -211,6 +214,7 @@ void    recur(t_lmn *lmn)
     {
         if (lmn->mtrx[lmn->str][i] == 1)
         {
+            lmn->mtrxv[lmn->str] = 1;
             if (i == lmn->end)
             {
                 ft_lstpushback((t_list **)&begin->content, &lmn->str, sizeof(int));
@@ -234,11 +238,122 @@ void    recur(t_lmn *lmn)
                     free(begin->content);
             }
         }
+        j = 0;
+        while (j <= lmn->id)
+        {
+            lmn->vroom[j] += lmn->mtrxv[j];
+            lmn->mtrxv[j] = 0;
+            j++;
+        }
     }
     begin->content = NULL;
+    lmn->vroom[lmn->str] = 0;
+    j= -1;
+    while (++j <= lmn->id)
+    {
+        printf("{%d|%d}-", lmn->vroom[j], j);
+    }
+    printf("\n");
 }
 
-int main(void) {
+int     lenlist(t_list *list)
+{
+    int i;
+
+    i= 0;
+    while (list)
+    {
+        i++;
+        list = list->next;
+    }
+    return (i);
+}
+
+void    dellist(t_list **list)
+{
+    t_list *tmp;
+    t_list *next;
+
+    tmp = *list;
+    while (tmp != NULL)
+    {
+        next = tmp->next;
+        if (tmp->content)
+            free(tmp->content);
+        free(tmp);
+        tmp = next;
+    }
+    *list = NULL;
+}
+
+int   lenfre(t_list *rm, int i)
+{
+    int *id;
+
+    while (rm)
+    {
+        id = rm->content;
+        if (*id == i)
+            return (1);
+        rm = rm->next;
+    }
+    return (0);
+}
+
+void    filtr(t_lmn *lmn)
+{
+    int i;
+    int j;
+    t_list *frst;
+    t_list *scnd;
+    t_list *begin;
+    t_list *rm;
+
+
+    i = -1;
+    j = 0;
+    frst = NULL;
+    scnd = NULL;
+    while (++i <= lmn->id)
+    {
+        if (lmn->vroom[i] >= 2)
+        {
+            begin = lmn->way;
+            while (begin)
+            {
+                rm = (t_list *)lmn->way->content;
+                if (j == 0)
+                {
+                    if (lenfre(rm, i))
+                        frst = lmn->way->content;
+                    j++;
+                }
+                else if (j == 1)
+                {
+                    if (lenfre(rm, i))
+                        scnd = lmn->way->content;
+                    j++;
+
+                }
+                if (j == 2)
+                {
+                    j = 0;
+                    if (lenlist(frst) < lenlist(scnd))
+                        dellist(&scnd);
+                    else
+                        dellist(&frst);
+                    lmn->vroom[i]--;
+                    i = -1;
+                    break;
+                }
+                begin = begin->next;
+            }
+        }
+    }
+}
+
+int main(void)
+{
     t_lmn lmn;
 
     lmn.all = NULL;
@@ -250,6 +365,7 @@ int main(void) {
     valid(&lmn);
     matrix(&lmn);
     recur(&lmn);
+    filtr(&lmn);
 
     int i = -1;
     ft_printf("\n\\ 01234\n");
@@ -277,16 +393,19 @@ int main(void) {
 //    }
 
     t_list *g;
-    while (lmn.way->next)
+    while (lmn.way)
     {
-        g = (t_list *)lmn.way->content;
-        while(g)
+        if (lmn.way->content != NULL)
         {
-            int *id = g->content;
-            printf("%d ", *id);
-            g = g->next;
+            g = (t_list *)lmn.way->content;
+            while (g)
+            {
+                int *id = g->content;
+                printf("%d ", *id);
+                g = g->next;
+            }
+            printf("\n");
         }
-        printf("\n");
         lmn.way = lmn.way->next;
     }
     return (1);

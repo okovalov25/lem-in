@@ -23,6 +23,7 @@ typedef struct  s_lemin
     int     end;
     int     **mtrx;
     int     *mtrxv;
+    int     *vroom;
     t_list  *way;
 }               t_lmn;
 
