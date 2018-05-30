@@ -120,7 +120,7 @@ int     links(t_lmn *lmn, int i, int j)
     {
         if (tmp->id == j)
         {
-            ft_printf("[%s|%d]\n", tmp->name, tmp->id);
+            //printf("[%s|%d]\n", tmp->name, tmp->id);
             lnk = tmp->links;
             while (lnk)
             {
@@ -129,7 +129,7 @@ int     links(t_lmn *lmn, int i, int j)
                 {
                     if (tmp->id == i && !ft_strcmp(lnk->content, tmp->name))
                     {
-                       // ft_printf("{%s|%d}\n", tmp->name, tmp->id);
+                       // printf("{%s|%d}\n", tmp->name, tmp->id);
                         return (1);
                     }
                     tmp = tmp->next;
@@ -248,12 +248,15 @@ void    recur(t_lmn *lmn)
     }
     begin->content = NULL;
     lmn->vroom[lmn->str] = 0;
-    j= -1;
-    while (++j <= lmn->id)
-    {
-        printf("{%d|%d}-", lmn->vroom[j], j);
-    }
-    printf("\n");
+
+//    j= -1;
+//    while (++j <= lmn->id)
+//    {
+//        printf("{%d|%d}-", lmn->vroom[j], j);
+//    }
+//    printf("\n");
+
+    filtr(lmn, begin);
 }
 
 int     lenlist(t_list *list)
@@ -275,7 +278,7 @@ void    dellist(t_list **list)
     t_list *next;
 
     tmp = *list;
-    while (tmp != NULL)
+    while (tmp)
     {
         next = tmp->next;
         if (tmp->content)
@@ -300,56 +303,181 @@ int   lenfre(t_list *rm, int i)
     return (0);
 }
 
-void    filtr(t_lmn *lmn)
+void    compare(t_lmn *lmn, t_list *way, int i)
+{
+    t_list *begin;
+    t_list *bg;
+
+    begin = lmn->way;
+    bg = way;
+    while (begin)
+    {
+        if (lenfre((t_list *)begin->content, i))
+        {
+            bg = begin->next;
+            while (bg)
+            {
+                if (lenfre((t_list *)bg->content, i))
+                {
+                    if (lenlist(begin->content) < lenlist(bg->content))
+                    {
+                        dellist(bg->content);
+                        free(bg);
+                        return;
+                    }
+                    else
+                    {
+                        dellist(begin->content);
+                        free(begin);
+                        return;
+                    }
+                }
+                bg = begin->next;
+            }
+        }
+        bg = begin->next;
+        begin = begin->next;
+    }
+}
+
+void    filtr(t_lmn *lmn, t_list *way)
 {
     int i;
-    int j;
-    t_list *frst;
-    t_list *scnd;
     t_list *begin;
-    t_list *rm;
+    t_list *g;
+    t_list *n;
 
 
     i = -1;
-    j = 0;
-    frst = NULL;
-    scnd = NULL;
     while (++i <= lmn->id)
     {
         if (lmn->vroom[i] >= 2)
         {
-            begin = lmn->way;
-            while (begin)
-            {
-                rm = (t_list *)lmn->way->content;
-                if (j == 0)
-                {
-                    if (lenfre(rm, i))
-                        frst = lmn->way->content;
-                    j++;
-                }
-                else if (j == 1)
-                {
-                    if (lenfre(rm, i))
-                        scnd = lmn->way->content;
-                    j++;
-
-                }
-                if (j == 2)
-                {
-                    j = 0;
-                    if (lenlist(frst) < lenlist(scnd))
-                        dellist(&scnd);
-                    else
-                        dellist(&frst);
-                    lmn->vroom[i]--;
-                    i = -1;
-                    break;
-                }
-                begin = begin->next;
-            }
+            compare(lmn, way, i);
+            lmn->vroom[i]--;
+            i = -1;
         }
     }
+    begin = lmn->way;
+    g = NULL;
+    while (lmn->way)
+    {
+        if (!lmn->way->content)
+        {
+            if (!g)
+            {
+                g = lmn->way->next;
+                lmn->way->next = NULL;
+                lmn->way = g;
+                begin = g;
+            }
+            else
+            {
+                if (lmn->way->next)
+                {
+                    n = lmn->way->next;
+                    lmn->way->next = NULL;
+                    g->next = n;
+                }
+                else
+                {
+                    g->next = NULL;
+                }
+            }
+        }
+        g = lmn->way;
+        lmn->way = lmn->way->next;
+    }
+    lmn->way = begin;
+}
+
+int    antcheck(int *ants, int n, int end)
+{
+    int i;
+
+    i = -1;
+    while (++i < n)
+        if (ants[i] != end)
+            return (0);
+    return (1);
+}
+
+int     moveant(int a, t_lmn *lmn)
+{
+    t_list *g;
+    t_list *begin;
+    int     e;
+    int     c;
+
+    e = 0;
+    if (a == lmn->str)
+        lmn->entr++;
+    begin = lmn->way;
+    while (begin)
+    {
+        if (begin->content)
+        {
+            g = (t_list *)begin->content;
+            while (g)
+            {
+                c = *((int *)g->content);
+                if (c == a)
+                {
+                    if (a == lmn->str)
+                    {
+                        if (lmn->entr == e)
+                        {
+                            g = g->next;
+                            c = *((int *)g->content);
+                            return (c);
+                        }
+                    }
+                    else
+                    {
+                        g = g->next;
+                        c = *((int *)g->content);
+                        return (c);
+                    }
+                }
+                g = g->next;
+            }
+        }
+        begin = begin->next;
+        e++;
+    }
+    return (-1);
+}
+
+void    ant(t_lmn *lmn)
+{
+    int *ants;
+    int i;
+    int r;
+
+    i = -1;
+    ants = (int *)malloc(sizeof(int) * lmn->nmbr - 1);
+    while (++i < lmn->nmbr)
+        ants[i] = lmn->str;
+    while (!antcheck(ants, lmn->nmbr, lmn->end))
+    {
+        lmn->entr = -1;
+        i = -1;
+        while (++i < lmn->nmbr)
+        {
+            if (ants[i] == lmn->end)
+            {
+                continue;
+            }
+            r = moveant(ants[i], lmn);
+            if (r > -1)
+            {
+                ants[i] = r;
+                printf("L%d-%d ", i + 1, ants[i]);
+            }
+        }
+        printf("\n");
+    }
+
 }
 
 int main(void)
@@ -365,18 +493,18 @@ int main(void)
     valid(&lmn);
     matrix(&lmn);
     recur(&lmn);
-    filtr(&lmn);
+    ant(&lmn);
 
     int i = -1;
-    ft_printf("\n\\ 01234\n");
+    printf("\n\\ 01234\n");
     while (++i <= lmn.id) {
         int j = -1;
-        ft_printf("%d|", i);
+        printf("%d|", i);
         while (++j <= lmn.id)
-            ft_printf("%d", lmn.mtrx[i][j]);
-        ft_printf("\n");
+            printf("%d", lmn.mtrx[i][j]);
+        printf("\n");
     }
-    ft_printf("s%d-e%d\n", lmn.str, lmn.end);
+    printf("s%d-e%d\n", lmn.str, lmn.end);
 
     //ft_printf("[%d]\n", lmn.nmbr);
 
@@ -395,7 +523,7 @@ int main(void)
     t_list *g;
     while (lmn.way)
     {
-        if (lmn.way->content != NULL)
+        if (lmn.way)
         {
             g = (t_list *)lmn.way->content;
             while (g)

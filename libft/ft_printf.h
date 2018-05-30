@@ -19,6 +19,8 @@
 # include <unistd.h>
 # include "libft.h"
 
+# include <stdint.h>
+
 # define A(x) ((x) < 0 ? -(x) : (x))
 # define BIT7 127
 # define BIT11 2047

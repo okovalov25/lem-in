@@ -21,6 +21,7 @@ typedef struct  s_lemin
     int     wid;
     int     str;
     int     end;
+    int     entr;
     int     **mtrx;
     int     *mtrxv;
     int     *vroom;
@@ -28,5 +29,6 @@ typedef struct  s_lemin
 }               t_lmn;
 
 void    lstroompush(t_rms **list, char *content, int id);
+void    filtr(t_lmn *lmn, t_list *way);
 
 #endif
