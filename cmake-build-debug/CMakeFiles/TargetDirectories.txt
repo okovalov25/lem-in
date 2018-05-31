@@ -1,3 +1,0 @@
-/home/polaron/cf/lem-in/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/polaron/cf/lem-in/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/polaron/cf/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir
