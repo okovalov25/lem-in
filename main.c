@@ -72,6 +72,9 @@ int valid(t_lmn *lmn)
     if (get_next_line(0, &buf))
         if ((n = ft_atoi(buf)) > 0)
             lmn->nmbr = n;
+        else
+            return (0);
+
     n = 0;
     while (get_next_line(0, &buf))
     {
@@ -82,14 +85,14 @@ int valid(t_lmn *lmn)
         {
             if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
             {
-                ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
                 if (!ft_strcmp(buf, "##start"))
                     c = 's';
                 else
                     c = 'e';
                 get_next_line(0, &buf);
-                if (buf[0] == '#' && buf[1] != '#')
-                    continue;
+                ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
+                if (buf[0] == 'L' || buf[0] == '#')
+                    return (0);
                 roomfnd(buf, lmn, c);
                 if (ft_strchr(buf, '-'))
                     n = 1;
@@ -99,7 +102,11 @@ int valid(t_lmn *lmn)
                 if (ft_strchr(buf, '-'))
                     n = 1;
                 else
+                {
+                    if (buf[0] == 'L' || buf[0] == '#')
+                        return (0);
                     roomfnd(buf, lmn, 'o');
+                }
             }
         }
         if (n == 1)
@@ -120,7 +127,6 @@ int     links(t_lmn *lmn, int i, int j)
     {
         if (tmp->id == j)
         {
-            //printf("[%s|%d]\n", tmp->name, tmp->id);
             lnk = tmp->links;
             while (lnk)
             {
@@ -128,10 +134,7 @@ int     links(t_lmn *lmn, int i, int j)
                 while (tmp)
                 {
                     if (tmp->id == i && !ft_strcmp(lnk->content, tmp->name))
-                    {
-                       // printf("{%s|%d}\n", tmp->name, tmp->id);
                         return (1);
-                    }
                     tmp = tmp->next;
                 }
                 lnk = lnk->next;
@@ -248,14 +251,6 @@ void    recur(t_lmn *lmn)
     }
     begin->content = NULL;
     lmn->vroom[lmn->str] = 0;
-
-//    j= -1;
-//    while (++j <= lmn->id)
-//    {
-//        printf("{%d|%d}-", lmn->vroom[j], j);
-//    }
-//    printf("\n");
-
     filtr(lmn, begin);
 }
 
@@ -309,7 +304,6 @@ void    compare(t_lmn *lmn, t_list *way, int i)
     t_list *bg;
 
     begin = lmn->way;
-    bg = way;
     while (begin)
     {
         if (lenfre((t_list *)begin->content, i))
@@ -335,7 +329,6 @@ void    compare(t_lmn *lmn, t_list *way, int i)
                 bg = begin->next;
             }
         }
-        bg = begin->next;
         begin = begin->next;
     }
 }
@@ -423,21 +416,15 @@ int     moveant(int a, t_lmn *lmn)
                 c = *((int *)g->content);
                 if (c == a)
                 {
+                    g = g->next;
+                    c = *((int *)g->content);
                     if (a == lmn->str)
                     {
                         if (lmn->entr == e)
-                        {
-                            g = g->next;
-                            c = *((int *)g->content);
                             return (c);
-                        }
                     }
                     else
-                    {
-                        g = g->next;
-                        c = *((int *)g->content);
                         return (c);
-                    }
                 }
                 g = g->next;
             }
@@ -465,9 +452,7 @@ void    ant(t_lmn *lmn)
         while (++i < lmn->nmbr)
         {
             if (ants[i] == lmn->end)
-            {
                 continue;
-            }
             r = moveant(ants[i], lmn);
             if (r > -1)
             {
@@ -480,7 +465,41 @@ void    ant(t_lmn *lmn)
 
 }
 
-int main(void)
+void    printin(t_lmn *lmn)
+{
+    printf("%d\n", lmn->nmbr);
+    while (lmn->all)
+    {
+        if (lmn->all)
+            printf("%s\n", (char*)lmn->all->content);
+        lmn->all = lmn->all->next;
+    }
+    ft_printf("\n");
+}
+
+void    printout(t_lmn *lmn)
+{
+    t_list *g;
+
+    printf("\n");
+    while (lmn->way)
+    {
+        if (lmn->way)
+        {
+            g = (t_list *) lmn->way->content;
+            while (g)
+            {
+                int *id = g->content;
+                printf("%d ", *id);
+                g = g->next;
+            }
+            printf("\n");
+        }
+        lmn->way = lmn->way->next;
+    }
+}
+
+int main(int argc, char **argv)
 {
     t_lmn lmn;
 
@@ -490,51 +509,17 @@ int main(void)
     lmn.id = -1;
     lmn.wid = 0;
 
-    valid(&lmn);
+    if (!valid(&lmn))
+    {
+        printf("ERROR\n");
+        return (0);
+    }
     matrix(&lmn);
     recur(&lmn);
+    printin(&lmn);
     ant(&lmn);
 
-    int i = -1;
-    printf("\n\\ 01234\n");
-    while (++i <= lmn.id) {
-        int j = -1;
-        printf("%d|", i);
-        while (++j <= lmn.id)
-            printf("%d", lmn.mtrx[i][j]);
-        printf("\n");
-    }
-    printf("s%d-e%d\n", lmn.str, lmn.end);
-
-    //ft_printf("[%d]\n", lmn.nmbr);
-
-//    while (lmn.rms)
-//    {
-//        ft_printf("%s|%d\n", lmn.rms->name, lmn.rms->id);
-//        while (lmn.rms->links)
-//        {
-//            ft_printf("{%s}", lmn.rms->links->content);
-//            lmn.rms->links = lmn.rms->links->next;
-//        }
-//        ft_printf("\n");
-//        lmn.rms = lmn.rms->next;
-//    }
-
-    t_list *g;
-    while (lmn.way)
-    {
-        if (lmn.way)
-        {
-            g = (t_list *)lmn.way->content;
-            while (g)
-            {
-                int *id = g->content;
-                printf("%d ", *id);
-                g = g->next;
-            }
-            printf("\n");
-        }
-        lmn.way = lmn.way->next;
-    }
+    if (argc == 2 && !ft_strcmp(argv[1], "way"))
+        printout(&lmn);
     return (1);
 }
