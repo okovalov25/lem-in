@@ -63,26 +63,61 @@ void    linkfnd(char *buf, t_lmn *lmn)
     }
 }
 
+int     analyze(char *buf)
+{
+    int i;
+    int spc;
+    int rez;
+
+    i = -1;
+    spc = 0;
+    rez = 0;
+    if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
+        return (0);
+    while (buf[++i])
+    {
+        if (buf[i] == ' ')
+        {
+            spc++;
+            i++;
+            if (!buf[i] || (buf[i] < '0' || buf[i] > '9'))
+                return (-1);
+        }
+        if (buf[i] == '-')
+            rez = 1;
+    }
+    if (spc > 0 && spc < 2)
+        return (-1);
+    return (rez);
+}
+
 int valid(t_lmn *lmn)
 {
     char *buf;
     int   n;
     char  c;
+    int   rez;
 
     if (get_next_line(0, &buf))
         if ((n = ft_atoi(buf)) > 0)
             lmn->nmbr = n;
         else
             return (0);
-
-    n = 0;
+    n = -1;
     while (get_next_line(0, &buf))
     {
         ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
         if (buf[0] == '#' && buf[1] != '#')
             continue;
-        if (n == 0)
+        if ((rez = analyze(buf)) == -1
+            || (rez == 1 && n == -1) || (rez == 0 && n == 1))
         {
+            printf("[%d]\n", rez);
+            return (0);
+        }
+        else if (rez == 0)
+        {
+            n = 0;
             if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
             {
                 if (!ft_strcmp(buf, "##start"))
@@ -91,30 +126,67 @@ int valid(t_lmn *lmn)
                     c = 'e';
                 get_next_line(0, &buf);
                 ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
-                if (buf[0] == 'L' || buf[0] == '#')
+                if (buf[0] == 'L' || buf[0] == '#' || analyze(buf) != 0
+                        || !ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
                     return (0);
                 roomfnd(buf, lmn, c);
-                if (ft_strchr(buf, '-'))
-                    n = 1;
             }
             else
             {
-                if (ft_strchr(buf, '-'))
-                    n = 1;
-                else
-                {
-                    if (buf[0] == 'L' || buf[0] == '#')
-                        return (0);
-                    roomfnd(buf, lmn, 'o');
-                }
+                if (buf[0] == 'L' || buf[0] == '#')
+                    return (0);
+                roomfnd(buf, lmn, 'o');
             }
         }
-        if (n == 1)
+        else if (rez == 1)
         {
+            n = 1;
             linkfnd(buf, lmn);
         }
     }
     return (1);
+
+
+//    n = 0;
+//    while (get_next_line(0, &buf))
+//    {
+//        ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
+//        if (buf[0] == '#' && buf[1] != '#')
+//            continue;
+//        if (n == 0)
+//        {
+//            if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
+//            {
+//                if (!ft_strcmp(buf, "##start"))
+//                    c = 's';
+//                else
+//                    c = 'e';
+//                get_next_line(0, &buf);
+//                ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
+//                if (buf[0] == 'L' || buf[0] == '#')
+//                    return (0);
+//                roomfnd(buf, lmn, c);
+//                if (ft_strchr(buf, '-'))
+//                    n = 1;
+//            }
+//            else
+//            {
+//                if (ft_strchr(buf, '-'))
+//                    n = 1;
+//                else
+//                {
+//                    if (buf[0] == 'L' || buf[0] == '#')
+//                        return (0);
+//                    roomfnd(buf, lmn, 'o');
+//                }
+//            }
+//        }
+//        if (n == 1)
+//        {
+//            linkfnd(buf, lmn);
+//        }
+//    }
+//    return (1);
 }
 
 int     links(t_lmn *lmn, int i, int j)
