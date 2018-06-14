@@ -10,10 +10,10 @@
 #                                                                              #
 #******************************************************************************#
 
-NAME = okovalov.filler
+NAME = lem-in
 
 SRC =	main.c \
-        support.c \
+        rooms.c \
 
 OBJ = $(SRC:.c=.o)
 

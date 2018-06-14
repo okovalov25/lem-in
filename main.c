@@ -97,17 +97,24 @@ int valid(t_lmn *lmn)
     int   n;
     char  c;
     int   rez;
+    int i;
 
     if (get_next_line(0, &buf))
+    {
+        i = -1;
+        while (buf[++i])
+            if (ft_isalpha(buf[i]))
+                return (0);
         if ((n = ft_atoi(buf)) > 0)
             lmn->nmbr = n;
         else
             return (0);
+    }
     n = -1;
     while (get_next_line(0, &buf))
     {
         ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
-        if (buf[0] == '#' && buf[1] != '#')
+        if (buf[0] == '#' && (ft_strcmp(buf, "##start") && ft_strcmp(buf, "##end")))
             continue;
         if ((rez = analyze(buf)) == -1
             || (rez == 1 && n == -1) || (rez == 0 && n == 1))
@@ -323,7 +330,7 @@ void    recur(t_lmn *lmn)
     }
     begin->content = NULL;
     lmn->vroom[lmn->str] = 0;
-    filtr(lmn, begin);
+    filtr(lmn);
 }
 
 int     lenlist(t_list *list)
@@ -370,7 +377,7 @@ int   lenfre(t_list *rm, int i)
     return (0);
 }
 
-void    compare(t_lmn *lmn, t_list *way, int i)
+void    compare(t_lmn *lmn, int i)
 {
     t_list *begin;
     t_list *bg;
@@ -386,26 +393,20 @@ void    compare(t_lmn *lmn, t_list *way, int i)
                 if (lenfre((t_list *)bg->content, i))
                 {
                     if (lenlist(begin->content) < lenlist(bg->content))
-                    {
-                        dellist(bg->content);
-                        free(bg);
-                        return;
-                    }
+                        dellist(((t_list **)&(bg->content)));
                     else
-                    {
-                        dellist(begin->content);
-                        free(begin);
-                        return;
-                    }
+                        dellist(((t_list **)&(begin->content)));
+                    return;
                 }
                 bg = begin->next;
             }
         }
         begin = begin->next;
     }
+    printout(lmn);
 }
 
-void    filtr(t_lmn *lmn, t_list *way)
+void    filtr(t_lmn *lmn)
 {
     int i;
     t_list *begin;
@@ -418,7 +419,7 @@ void    filtr(t_lmn *lmn, t_list *way)
     {
         if (lmn->vroom[i] >= 2)
         {
-            compare(lmn, way, i);
+            compare(lmn, i);
             lmn->vroom[i]--;
             i = -1;
         }
@@ -485,18 +486,21 @@ int     moveant(int a, t_lmn *lmn)
             g = (t_list *)begin->content;
             while (g)
             {
-                c = *((int *)g->content);
-                if (c == a)
+                if (g->content)
                 {
-                    g = g->next;
-                    c = *((int *)g->content);
-                    if (a == lmn->str)
+                    c = *((int *) g->content);
+                    if (c == a)
                     {
-                        if (lmn->entr == e)
+                        g = g->next;
+                        c = *((int *) g->content);
+                        if (a == lmn->str)
+                        {
+                            if (lmn->entr == e)
+                                return (c);
+                        }
+                        else
                             return (c);
                     }
-                    else
-                        return (c);
                 }
                 g = g->next;
             }
@@ -534,7 +538,6 @@ void    ant(t_lmn *lmn)
         }
         printf("\n");
     }
-
 }
 
 void    printin(t_lmn *lmn)
@@ -556,17 +559,14 @@ void    printout(t_lmn *lmn)
     printf("\n");
     while (lmn->way)
     {
-        if (lmn->way)
+        g = (t_list *) lmn->way->content;
+        while (g)
         {
-            g = (t_list *) lmn->way->content;
-            while (g)
-            {
-                int *id = g->content;
-                printf("%d ", *id);
-                g = g->next;
-            }
-            printf("\n");
+            int *id = g->content;
+            printf("%d ", *id);
+            g = g->next;
         }
+        printf("\n");
         lmn->way = lmn->way->next;
     }
 }
@@ -593,5 +593,7 @@ int main(int argc, char **argv)
 
     if (argc == 2 && !ft_strcmp(argv[1], "way"))
         printout(&lmn);
+    while(1)
+
     return (1);
 }

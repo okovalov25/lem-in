@@ -29,6 +29,7 @@ typedef struct  s_lemin
 }               t_lmn;
 
 void    lstroompush(t_rms **list, char *content, int id);
-void    filtr(t_lmn *lmn, t_list *way);
+void    filtr(t_lmn *lmn);
+void    printout(t_lmn *lmn);
 
 #endif
