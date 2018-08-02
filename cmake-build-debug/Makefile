@@ -2067,6 +2067,33 @@ rooms.c.s:
 	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/rooms.c.s
 .PHONY : rooms.c.s
 
+valid.o: valid.c.o
+
+.PHONY : valid.o
+
+# target to build an object file
+valid.c.o:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/valid.c.o
+.PHONY : valid.c.o
+
+valid.i: valid.c.i
+
+.PHONY : valid.i
+
+# target to preprocess a source file
+valid.c.i:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/valid.c.i
+.PHONY : valid.c.i
+
+valid.s: valid.c.s
+
+.PHONY : valid.s
+
+# target to generate assembly for a file
+valid.c.s:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/valid.c.s
+.PHONY : valid.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2292,6 +2319,9 @@ help:
 	@echo "... rooms.o"
 	@echo "... rooms.i"
 	@echo "... rooms.s"
+	@echo "... valid.o"
+	@echo "... valid.i"
+	@echo "... valid.s"
 .PHONY : help
 
 

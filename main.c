@@ -1,103 +1,13 @@
 
 #include "lem-in.h"
 
-void    roomfnd(char *buf, t_lmn *lmn, char c)
-{
-    int i;
-    char *t;
-    t_rms *tmp;
-
-    i = 0;
-    lmn->id++;
-    while (buf[i] != ' ')
-        i++;
-    t = ft_strsub(buf, 0, i);
-    lstroompush(&lmn->rms, t, lmn->id);
-    i = 0;
-    if (c == 's' || c == 'e')
-    {
-        tmp = lmn->rms;
-        while (tmp->next)
-        {
-            if (tmp->name == t)
-                ft_lstpushback(&tmp->links, (c == 's' ? "start" : "end!!"), 6);
-            tmp = tmp->next;
-            i++;
-        }
-        if (c == 's')
-            lmn->str = lmn->id;
-        else
-            lmn->end = lmn->id;
-    }
-}
-
-void    linkfnd(char *buf, t_lmn *lmn)
-{
-    int i;
-    char *t;
-    char *l;
-    t_rms *tmp;
-
-    i = 0;
-    while (buf[i] != '-')
-        i++;
-    t = ft_strsub(buf, 0, i);
-    l = ft_strsub(buf, i + 1, ft_strlen(buf));
-    tmp = lmn->rms;
-    while (tmp)
-    {
-        if (!ft_strcmp(tmp->name, t))
-        {
-            ft_lstpushback(&tmp->links, l, ft_strlen(l));
-        }
-        tmp = tmp->next;
-    }
-    tmp = lmn->rms;
-    while (tmp)
-    {
-        if (!ft_strcmp(tmp->name, l))
-        {
-            ft_lstpushback(&tmp->links, t, ft_strlen(t));
-        }
-        tmp = tmp->next;
-    }
-}
-
-int     analyze(char *buf)
-{
-    int i;
-    int spc;
-    int rez;
-
-    i = -1;
-    spc = 0;
-    rez = 0;
-    if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
-        return (0);
-    while (buf[++i])
-    {
-        if (buf[i] == ' ')
-        {
-            spc++;
-            i++;
-            if (!buf[i] || (buf[i] < '0' || buf[i] > '9'))
-                return (-1);
-        }
-        if (buf[i] == '-')
-            rez = 1;
-    }
-    if (spc > 0 && spc < 2)
-        return (-1);
-    return (rez);
-}
-
 int valid(t_lmn *lmn)
 {
     char *buf;
     int   n;
     char  c;
     int   rez;
-    int i;
+    int   i;
 
     if (get_next_line(0, &buf))
     {
@@ -110,119 +20,47 @@ int valid(t_lmn *lmn)
         else
             return (0);
     }
+    free(buf);
     n = -1;
     while (get_next_line(0, &buf))
     {
         ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
-        if (buf[0] == '#' && (ft_strcmp(buf, "##start") && ft_strcmp(buf, "##end")))
+        if (buf[0] == '#' && (ft_strcmp(buf, "##start") && ft_strcmp(buf, "##end"))) {
+            free(buf);
             continue;
+        }
         if ((rez = analyze(buf)) == -1
             || (rez == 1 && n == -1) || (rez == 0 && n == 1))
-        {
-            printf("[%d]\n", rez);
             return (0);
-        }
-        else if (rez == 0)
-        {
+        else if (rez == 0) {
             n = 0;
-            if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
-            {
+            if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end")) {
                 if (!ft_strcmp(buf, "##start"))
                     c = 's';
                 else
                     c = 'e';
+                free(buf);
                 get_next_line(0, &buf);
                 ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
                 if (buf[0] == 'L' || buf[0] == '#' || analyze(buf) != 0
-                        || !ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
+                    || !ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end") || !roomfnd(buf, lmn, c))
                     return (0);
-                roomfnd(buf, lmn, c);
-            }
-            else
-            {
-                if (buf[0] == 'L' || buf[0] == '#')
+            } else {
+                if (buf[0] == 'L' || buf[0] == '#' || !roomfnd(buf, lmn, 'o'))
                     return (0);
-                roomfnd(buf, lmn, 'o');
             }
         }
         else if (rez == 1)
         {
             n = 1;
-            linkfnd(buf, lmn);
+            if (linkfnd(buf, lmn) < 2)
+                return (0);
         }
+        free(buf);
     }
+    if (lmn->end == -1 || lmn->str == -1 || n != 1)
+        return (0);
     return (1);
-
-
-//    n = 0;
-//    while (get_next_line(0, &buf))
-//    {
-//        ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
-//        if (buf[0] == '#' && buf[1] != '#')
-//            continue;
-//        if (n == 0)
-//        {
-//            if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
-//            {
-//                if (!ft_strcmp(buf, "##start"))
-//                    c = 's';
-//                else
-//                    c = 'e';
-//                get_next_line(0, &buf);
-//                ft_lstpushback(&lmn->all, buf, ft_strlen(buf));
-//                if (buf[0] == 'L' || buf[0] == '#')
-//                    return (0);
-//                roomfnd(buf, lmn, c);
-//                if (ft_strchr(buf, '-'))
-//                    n = 1;
-//            }
-//            else
-//            {
-//                if (ft_strchr(buf, '-'))
-//                    n = 1;
-//                else
-//                {
-//                    if (buf[0] == 'L' || buf[0] == '#')
-//                        return (0);
-//                    roomfnd(buf, lmn, 'o');
-//                }
-//            }
-//        }
-//        if (n == 1)
-//        {
-//            linkfnd(buf, lmn);
-//        }
-//    }
-//    return (1);
-}
-
-int     links(t_lmn *lmn, int i, int j)
-{
-    t_rms   *tmp;
-    t_list  *lnk;
-
-    tmp = lmn->rms;
-    while (tmp)
-    {
-        if (tmp->id == j)
-        {
-            lnk = tmp->links;
-            while (lnk)
-            {
-                tmp = lmn->rms;
-                while (tmp)
-                {
-                    if (tmp->id == i && !ft_strcmp(lnk->content, tmp->name))
-                        return (1);
-                    tmp = tmp->next;
-                }
-                lnk = lnk->next;
-            }
-            return (0);
-        }
-        tmp = tmp->next;
-    }
-    return (0);
 }
 
 void    matrix(t_lmn *lmn)
@@ -330,7 +168,6 @@ void    recur(t_lmn *lmn)
     }
     begin->content = NULL;
     lmn->vroom[lmn->str] = 0;
-    filtr(lmn);
 }
 
 int     lenlist(t_list *list)
@@ -363,20 +200,6 @@ void    dellist(t_list **list)
     *list = NULL;
 }
 
-int   lenfre(t_list *rm, int i)
-{
-    int *id;
-
-    while (rm)
-    {
-        id = rm->content;
-        if (*id == i)
-            return (1);
-        rm = rm->next;
-    }
-    return (0);
-}
-
 void    compare(t_lmn *lmn, int i)
 {
     t_list *begin;
@@ -390,6 +213,8 @@ void    compare(t_lmn *lmn, int i)
             bg = begin->next;
             while (bg)
             {
+                if (!bg->next)
+                    return;
                 if (lenfre((t_list *)bg->content, i))
                 {
                     if (lenlist(begin->content) < lenlist(bg->content))
@@ -403,7 +228,6 @@ void    compare(t_lmn *lmn, int i)
         }
         begin = begin->next;
     }
-    printout(lmn);
 }
 
 void    filtr(t_lmn *lmn)
@@ -412,7 +236,6 @@ void    filtr(t_lmn *lmn)
     t_list *begin;
     t_list *g;
     t_list *n;
-
 
     i = -1;
     while (++i <= lmn->id)
@@ -435,6 +258,7 @@ void    filtr(t_lmn *lmn)
                 g = lmn->way->next;
                 lmn->way->next = NULL;
                 lmn->way = g;
+                free(begin);
                 begin = g;
             }
             else
@@ -455,6 +279,7 @@ void    filtr(t_lmn *lmn)
         lmn->way = lmn->way->next;
     }
     lmn->way = begin;
+    free(g);
 }
 
 int    antcheck(int *ants, int n, int end)
@@ -511,6 +336,20 @@ int     moveant(int a, t_lmn *lmn)
     return (-1);
 }
 
+char*     idtoname(t_lmn *lmn, int i)
+{
+    t_rms *begin;
+
+    begin = lmn->rms;
+    while (begin)
+    {
+        if (begin->id == i)
+            return (begin->name);
+        begin = begin->next;
+    }
+    return (NULL);
+}
+
 void    ant(t_lmn *lmn)
 {
     int *ants;
@@ -533,7 +372,7 @@ void    ant(t_lmn *lmn)
             if (r > -1)
             {
                 ants[i] = r;
-                printf("L%d-%d ", i + 1, ants[i]);
+                printf("L%d-%s ", i + 1, idtoname(lmn, ants[i]));
             }
         }
         printf("\n");
@@ -542,12 +381,14 @@ void    ant(t_lmn *lmn)
 
 void    printin(t_lmn *lmn)
 {
+    t_list *tmp;
+
+    tmp = lmn->all;
     printf("%d\n", lmn->nmbr);
-    while (lmn->all)
+    while (tmp)
     {
-        if (lmn->all)
-            printf("%s\n", (char*)lmn->all->content);
-        lmn->all = lmn->all->next;
+        printf("%s\n", (char*)tmp->content);
+        tmp = tmp->next;
     }
     ft_printf("\n");
 }
@@ -555,19 +396,21 @@ void    printin(t_lmn *lmn)
 void    printout(t_lmn *lmn)
 {
     t_list *g;
+    t_list *bg;
 
-    printf("\n");
-    while (lmn->way)
+    bg = lmn->way;
+    ft_printf("\n");
+    while (bg)
     {
-        g = (t_list *) lmn->way->content;
+        g = (t_list *)bg->content;
         while (g)
         {
             int *id = g->content;
-            printf("%d ", *id);
+            ft_printf("%s ", idtoname(lmn, *id));
             g = g->next;
         }
-        printf("\n");
-        lmn->way = lmn->way->next;
+        ft_printf("\n");
+        bg = bg->next;
     }
 }
 
@@ -580,6 +423,8 @@ int main(int argc, char **argv)
     lmn.way = NULL;
     lmn.id = -1;
     lmn.wid = 0;
+    lmn.str = -1;
+    lmn.end = -1;
 
     if (!valid(&lmn))
     {
@@ -588,12 +433,18 @@ int main(int argc, char **argv)
     }
     matrix(&lmn);
     recur(&lmn);
+    if (!lmn.way->content)
+    {
+        printf("ERROR\n");
+        return (0);
+    }
+    filtr(&lmn);
     printin(&lmn);
     ant(&lmn);
-
     if (argc == 2 && !ft_strcmp(argv[1], "way"))
+    {
         printout(&lmn);
-    while(1)
-
+    }
+    while(1);
     return (1);
 }

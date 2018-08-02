@@ -76,6 +76,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/okovalov/lem-in/libft/wchar.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/libft/wchar.c.o"
   "/Users/okovalov/lem-in/main.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/main.c.o"
   "/Users/okovalov/lem-in/rooms.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/rooms.c.o"
+  "/Users/okovalov/lem-in/valid.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/valid.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 

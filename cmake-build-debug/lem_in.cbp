@@ -308,6 +308,9 @@
 		<Unit filename="/Users/okovalov/lem-in/rooms.c">
 			<Option target="lem_in"/>
 		</Unit>
+		<Unit filename="/Users/okovalov/lem-in/valid.c">
+			<Option target="lem_in"/>
+		</Unit>
 		<Unit filename="/Users/okovalov/lem-in/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
