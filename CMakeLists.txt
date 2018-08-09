@@ -75,4 +75,4 @@ add_executable(lem_in
         libft/libft.h
         libft/printf.c
         libft/spec.c
-        libft/wchar.c lem-in.h main.c rooms.c libft/ft_lstpushback.c valid.c)
+        libft/wchar.c lem-in.h main.c link.c rooms.c libft/ft_lstpushback.c valid.c analyze.c list.c way.c valid.c)

@@ -123,6 +123,33 @@ lem_in/fast:
 	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/build
 .PHONY : lem_in/fast
 
+analyze.o: analyze.c.o
+
+.PHONY : analyze.o
+
+# target to build an object file
+analyze.c.o:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/analyze.c.o
+.PHONY : analyze.c.o
+
+analyze.i: analyze.c.i
+
+.PHONY : analyze.i
+
+# target to preprocess a source file
+analyze.c.i:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/analyze.c.i
+.PHONY : analyze.c.i
+
+analyze.s: analyze.c.s
+
+.PHONY : analyze.s
+
+# target to generate assembly for a file
+analyze.c.s:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/analyze.c.s
+.PHONY : analyze.c.s
+
 libft/cast.o: libft/cast.c.o
 
 .PHONY : libft/cast.o
@@ -2013,6 +2040,60 @@ libft/wchar.c.s:
 	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/libft/wchar.c.s
 .PHONY : libft/wchar.c.s
 
+link.o: link.c.o
+
+.PHONY : link.o
+
+# target to build an object file
+link.c.o:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/link.c.o
+.PHONY : link.c.o
+
+link.i: link.c.i
+
+.PHONY : link.i
+
+# target to preprocess a source file
+link.c.i:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/link.c.i
+.PHONY : link.c.i
+
+link.s: link.c.s
+
+.PHONY : link.s
+
+# target to generate assembly for a file
+link.c.s:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/link.c.s
+.PHONY : link.c.s
+
+list.o: list.c.o
+
+.PHONY : list.o
+
+# target to build an object file
+list.c.o:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/list.c.o
+.PHONY : list.c.o
+
+list.i: list.c.i
+
+.PHONY : list.i
+
+# target to preprocess a source file
+list.c.i:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/list.c.i
+.PHONY : list.c.i
+
+list.s: list.c.s
+
+.PHONY : list.s
+
+# target to generate assembly for a file
+list.c.s:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/list.c.s
+.PHONY : list.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -2094,6 +2175,33 @@ valid.c.s:
 	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/valid.c.s
 .PHONY : valid.c.s
 
+way.o: way.c.o
+
+.PHONY : way.o
+
+# target to build an object file
+way.c.o:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/way.c.o
+.PHONY : way.c.o
+
+way.i: way.c.i
+
+.PHONY : way.i
+
+# target to preprocess a source file
+way.c.i:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/way.c.i
+.PHONY : way.c.i
+
+way.s: way.c.s
+
+.PHONY : way.s
+
+# target to generate assembly for a file
+way.c.s:
+	$(MAKE) -f CMakeFiles/lem_in.dir/build.make CMakeFiles/lem_in.dir/way.c.s
+.PHONY : way.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2103,6 +2211,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... lem_in"
+	@echo "... analyze.o"
+	@echo "... analyze.i"
+	@echo "... analyze.s"
 	@echo "... libft/cast.o"
 	@echo "... libft/cast.i"
 	@echo "... libft/cast.s"
@@ -2313,6 +2424,12 @@ help:
 	@echo "... libft/wchar.o"
 	@echo "... libft/wchar.i"
 	@echo "... libft/wchar.s"
+	@echo "... link.o"
+	@echo "... link.i"
+	@echo "... link.s"
+	@echo "... list.o"
+	@echo "... list.i"
+	@echo "... list.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
@@ -2322,6 +2439,9 @@ help:
 	@echo "... valid.o"
 	@echo "... valid.i"
 	@echo "... valid.s"
+	@echo "... way.o"
+	@echo "... way.i"
+	@echo "... way.s"
 .PHONY : help
 
 

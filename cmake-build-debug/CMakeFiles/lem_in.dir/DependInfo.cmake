@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/Users/okovalov/lem-in/analyze.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/analyze.c.o"
   "/Users/okovalov/lem-in/libft/cast.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/libft/cast.c.o"
   "/Users/okovalov/lem-in/libft/castind.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/libft/castind.c.o"
   "/Users/okovalov/lem-in/libft/castux.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/libft/castux.c.o"
@@ -74,9 +75,12 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/okovalov/lem-in/libft/printf.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/libft/printf.c.o"
   "/Users/okovalov/lem-in/libft/spec.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/libft/spec.c.o"
   "/Users/okovalov/lem-in/libft/wchar.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/libft/wchar.c.o"
+  "/Users/okovalov/lem-in/link.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/link.c.o"
+  "/Users/okovalov/lem-in/list.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/list.c.o"
   "/Users/okovalov/lem-in/main.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/main.c.o"
   "/Users/okovalov/lem-in/rooms.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/rooms.c.o"
   "/Users/okovalov/lem-in/valid.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/valid.c.o"
+  "/Users/okovalov/lem-in/way.c" "/Users/okovalov/lem-in/cmake-build-debug/CMakeFiles/lem_in.dir/way.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 

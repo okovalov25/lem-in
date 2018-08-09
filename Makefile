@@ -15,6 +15,10 @@ NAME = lem-in
 SRC =	main.c \
         rooms.c \
         valid.c \
+        analyze.c \
+        list.c \
+        way.c \
+        link.c \
 
 OBJ = $(SRC:.c=.o)
 

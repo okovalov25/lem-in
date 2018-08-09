@@ -69,9 +69,13 @@ file(REMOVE_RECURSE
   "CMakeFiles/lem_in.dir/libft/spec.c.o"
   "CMakeFiles/lem_in.dir/libft/wchar.c.o"
   "CMakeFiles/lem_in.dir/main.c.o"
+  "CMakeFiles/lem_in.dir/link.c.o"
   "CMakeFiles/lem_in.dir/rooms.c.o"
   "CMakeFiles/lem_in.dir/libft/ft_lstpushback.c.o"
   "CMakeFiles/lem_in.dir/valid.c.o"
+  "CMakeFiles/lem_in.dir/analyze.c.o"
+  "CMakeFiles/lem_in.dir/list.c.o"
+  "CMakeFiles/lem_in.dir/way.c.o"
   "lem_in.pdb"
   "lem_in"
 )

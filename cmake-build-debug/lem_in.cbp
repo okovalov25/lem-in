@@ -80,6 +80,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/okovalov/lem-in/analyze.c">
+			<Option target="lem_in"/>
+		</Unit>
 		<Unit filename="/Users/okovalov/lem-in/lem-in.h">
 			<Option target="lem_in"/>
 		</Unit>
@@ -302,6 +305,12 @@
 		<Unit filename="/Users/okovalov/lem-in/libft/wchar.c">
 			<Option target="lem_in"/>
 		</Unit>
+		<Unit filename="/Users/okovalov/lem-in/link.c">
+			<Option target="lem_in"/>
+		</Unit>
+		<Unit filename="/Users/okovalov/lem-in/list.c">
+			<Option target="lem_in"/>
+		</Unit>
 		<Unit filename="/Users/okovalov/lem-in/main.c">
 			<Option target="lem_in"/>
 		</Unit>
@@ -309,6 +318,9 @@
 			<Option target="lem_in"/>
 		</Unit>
 		<Unit filename="/Users/okovalov/lem-in/valid.c">
+			<Option target="lem_in"/>
+		</Unit>
+		<Unit filename="/Users/okovalov/lem-in/way.c">
 			<Option target="lem_in"/>
 		</Unit>
 		<Unit filename="/Users/okovalov/lem-in/CMakeLists.txt">
