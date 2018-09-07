@@ -6,7 +6,7 @@
 /*   By: okovalov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 14:26:04 by okovalov          #+#    #+#             */
-/*   Updated: 2018/08/02 13:24:05 by okovalov         ###   ########.fr       */
+/*   Updated: 2018/08/13 12:31:20 by okovalov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ void		roomfndsne(t_lmn *lmn, char c, t_coor cr)
 		lmn->str = lmn->id;
 	else if (c == 'e' && lmn->end == -1)
 		lmn->end = lmn->id;
+	else
+	{
+		lmn->end = -1;
+		lmn->str = -1;
+	}
 }
 
 int			roomfnd(char *buf, t_lmn *lmn, char c)
@@ -107,7 +112,7 @@ int			linkfnd(char *buf, t_lmn *lmn)
 	t = ft_strsub(buf, 0, i);
 	l = ft_strsub(buf, i + 1, ft_strlen(buf));
 	i = 0;
-	if (!linkfnd2(lmn, l, t, &i))
+	if (!ft_strcmp(t, l) || !linkfnd2(lmn, l, t, &i))
 		return (0);
 	tmp = lmn->rms;
 	while (tmp)

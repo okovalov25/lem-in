@@ -6,7 +6,7 @@
 /*   By: okovalov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/04 14:26:04 by okovalov          #+#    #+#             */
-/*   Updated: 2018/08/09 13:44:46 by okovalov         ###   ########.fr       */
+/*   Updated: 2018/08/13 12:34:22 by okovalov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,21 @@ void		compare(t_lmn *lmn, int i)
 int			strtend(t_lmn *lmn, char *buf)
 {
 	char	c;
+	char	*loc;
 
 	if (!ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end"))
 	{
-		if (!ft_strcmp(buf, "##start"))
-			c = 's';
-		else
-			c = 'e';
-		free(buf);
-		get_next_line(0, &buf);
-		ft_lstpushback(&lmn->all, buf, ft_strlen(buf) + 1);
-		if (buf[0] == 'L' || buf[0] == '#' || analyze(buf) != 0
-			|| !ft_strcmp(buf, "##start") || !ft_strcmp(buf, "##end")
-			|| !roomfnd(buf, lmn, c))
+		c = (!ft_strcmp(buf, "##start") ? 's' : 'e');
+		get_next_line(0, &loc);
+		ft_lstpushback(&lmn->all, loc, ft_strlen(loc) + 1);
+		if (loc[0] == 'L' || loc[0] == '#' || analyze(loc) != 0
+			|| !ft_strcmp(loc, "##start") || !ft_strcmp(loc, "##end")
+			|| !roomfnd(loc, lmn, c))
+		{
+			free(loc);
 			return (0);
+		}
+		free(loc);
 	}
 	else
 	{
